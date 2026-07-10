@@ -1,6 +1,6 @@
 # 🎬 YouTube Frame Catcher & Metadata Stamper (v1.4)
 
-YouTube videolarından **orijinal çözünürlükte** (1080p, 4K vb.) kayıpsız TIF veya JPG formatında tek tıkla ekran görüntüsü alan, klavye kısayolu destekleyen ve dosyaları doğrudan seçtiğiniz klasöre kaydeden modern bir tarayıcı eklentisi.
+A lightweight browser extension that captures YouTube video frames at **native resolution** (1080p, 4K, etc.) as lossless TIF or JPG, allows customizing keyboard shortcuts, and saves files directly to a chosen folder.
 
 ![Manifest](https://img.shields.io/badge/Manifest-V3-green)
 ![Compatibility](https://img.shields.io/badge/OS-Windows%20%7C%20macOS-blue)
@@ -8,60 +8,60 @@ YouTube videolarından **orijinal çözünürlükte** (1080p, 4K vb.) kayıpsız
 
 ---
 
-## ✨ Özellikler
+## ✨ Features
 
-- 📷 **Tek Tıkla Yakalama** — YouTube oynatıcı kontrollerine entegre kamera butonu.
-- ⚙️ **Oynatıcı İçi Ayarlar** — Oynatıcıdaki çark simgesiyle anında açılan minimalist ayarlar paneli.
-- 📁 **Doğrudan Klasör Seçimi (FSA API)** — İndirilenler klasörünü her seferinde sormaz. İstediğiniz herhangi bir klasörü bir kez seçin, doğrudan oraya kaydetsin.
-- ⌨️ **Kişiselleştirilebilir Kısayol** — İstediğiniz tuşu (Varsayılan `P`) kısayol olarak atayın.
-- 🖼️ **Format Seçimi** — Kayıpsız **TIF** veya sıkıştırılmış **JPG** formatları panelden değiştirilebilir.
-- 🏷️ **Temiz Dosya Adı** — Görsel üzerinde hiçbir logo/yazı barındırmaz. Dosya ismini otomatik oluşturur: `KanalAdı_VideoBaşlığı_Dakika-Saniye.jpg`.
-- ☁️ **iOS Tarzı Minimal Bildirim** — Ekran görüntüsü alındığında sağ üst köşeden kayarak çıkan modern beyaz bildirim.
+- 📷 **One-Click Capture** — Injects a camera button directly into the YouTube player controls.
+- ⚙️ **In-Player Settings Panel** — A minimalist settings overlay that opens directly inside the player via a gear (⚙️) icon.
+- 📁 **Direct Folder Selection (FSA API)** — Saves directly to your chosen folder on your disk. No more "Save As" prompts or default Downloads clutter.
+- ⌨️ **Custom Keyboard Shortcut** — Record and assign any key (default is `P`) to trigger the capture.
+- 🖼️ **Format Selection** — Toggle between compressed **JPG** and lossless **TIF** formats right inside the settings panel.
+- 🏷️ **Clean File Naming** — No watermark or overlay on the image. Files are auto-named using: `ChannelName_VideoTitle_Minutes-Seconds.jpg`.
+- ☁️ **iOS-Style Minimal Notification** — Clean, modern slide-in notification on the top right showing successful captures.
 
 ---
 
-## 📁 Proje Yapısı
+## 📁 Project Structure
 
 ```
 Youtube_Screenshoot/
-├── manifest.json       ← Eklenti ayarları ve izinler (Manifest V3)
-├── content.js          ← YouTube oynatıcısına butonu ve paneli enjekte eden ana kod
-├── background.js       ← İndirme işlemlerini yöneten servis
-├── utif.js             ← Fotopea tarafından geliştirilen kayıpsız TIF kodlayıcı
-├── popup.html          ← Eklenti üst bar popup arayüzü
-├── popup.js            ← Popup kontrol mantığı
-└── icons/              ← Eklenti logoları
+├── manifest.json       ← Manifest configuration and permissions (Manifest V3)
+├── content.js          ← Main script injecting buttons, panel, and capturing canvas
+├── background.js       ← Service worker managing downloads API
+├── utif.js             ← UTIF.js lossless TIF encoder by Photopea
+├── popup.html          ← Browser toolbar popup interface
+├── popup.js            ← Popup logic
+└── icons/              ← Extension branding assets
 ```
 
 ---
 
-## 🚀 Kurulum (Windows / macOS)
+## 🚀 Installation (Windows / macOS)
 
-Eklentiyi tarayıcınıza yüklemek için:
+To load the extension manually:
 
-1. Bu depoyu bilgisayarınıza indirin (veya klonlayın):
+1. Clone or download this repository to your machine:
    ```bash
    git clone https://github.com/MuratBrls/Youtube_Screenshoot.git
    ```
-2. Tarayıcınızda (Chrome veya Edge) `chrome://extensions/` adresine gidin.
-3. Sağ üstteki **Geliştirici Modu (Developer Mode)** seçeneğini aktif hale getirin.
-4. Sol üstteki **Paketlenmemiş öğe yükle (Load unpacked)** butonuna tıklayın.
-5. Klonladığınız/indirdiğiniz klasörü seçin.
-6. Eklenti hemen aktif olacaktır.
+2. Open your browser (Chrome or Edge) and navigate to `chrome://extensions/`.
+3. Enable **Developer Mode** using the toggle in the top-right corner.
+4. Click **Load Unpacked** in the top-left corner.
+5. Select the cloned/downloaded `Youtube_Screenshoot` project folder.
+6. The extension is now active and ready.
 
 ---
 
-## ⚙️ Nasıl Kullanılır?
+## ⚙️ How to Use
 
-1. Herhangi bir YouTube videosu açın.
-2. Video kontrollerinin sağ tarafına gelen **çark (⚙️) simgesine** tıklayın.
-3. **Kayıt Klasörü** alanına tıklayarak bilgisayarınızdan ekran resimlerinin kaydedileceği klasörü seçin (Bu klasör IndexedDB üzerinde güvenli bir şekilde saklanır).
-4. İstediğiniz **Formatı (JPG / TIF)** ve kullanmak istediğiniz **Kısayolu** belirleyin.
-5. Ekran görüntüsü almak için **Kamera (📷) simgesine** veya atadığınız kısayol tuşuna (örneğin **P**) basın.
-6. Sağ üstte çıkacak şık bildirimle görseliniz doğrudan seçtiğiniz klasöre kaydedilecektir.
+1. Open any YouTube video.
+2. Click the **gear (⚙️) icon** on the right side of the video player controls.
+3. Click the **Choose Folder** section to select the directory where screenshots will be saved (this permission is securely stored in IndexedDB).
+4. Select your preferred **Format (JPG / TIF)** and bind your custom **Shortcut Key**.
+5. Press the **Camera (📷) icon** or your assigned shortcut key (e.g., **P**) to take a screenshot.
+6. A clean iOS-style notification will slide in from the top right, and the screenshot will be saved directly into your folder.
 
 ---
 
-## 📄 Lisans
+## 📄 License
 
-MIT — İstediğiniz gibi kullanabilir, değiştirebilir ve dağıtabilirsiniz.
+MIT — Feel free to use, modify, and distribute this project.
