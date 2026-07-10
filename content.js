@@ -177,19 +177,10 @@
     const video = document.querySelector('video');
     if (!video || !video.videoWidth) { notify('Video bulunamadı', false); return; }
 
-    const timeLabel = fmtTime(video.currentTime || 0);
-
-    const titleEl =
-      document.querySelector('h1.ytd-watch-metadata yt-formatted-string') ||
-      document.querySelector('#title h1 yt-formatted-string') ||
-      document.querySelector('ytd-watch-metadata h1');
-    const chanEl =
-      document.querySelector('ytd-channel-name #text a') ||
-      document.querySelector('#channel-name #text a') ||
-      document.querySelector('#owner-name a');
-
-    const title   = titleEl ? titleEl.textContent.trim() : 'Video';
-    const channel = chanEl  ? chanEl.textContent.trim()  : 'Channel';
+    // Video ID + exact second → reconstructable YouTube link
+    // e.g.  dQw4w9WgXcQ_t553s.jpg  →  https://youtu.be/dQw4w9WgXcQ?t=553
+    const videoId = new URLSearchParams(location.search).get('v') || 'video';
+    const seconds = Math.floor(video.currentTime || 0);
 
     const W = video.videoWidth, H = video.videoHeight;
     const canvas = document.createElement('canvas');
@@ -228,7 +219,7 @@
       notify('Encode hatası: ' + e.message, false); return;
     }
 
-    const filename = `${sanitize(channel)}_${sanitize(title)}_${timeLabel}.${ext}`;
+    const filename = `${videoId}_t${seconds}s.${ext}`;
 
     const fsaOk = await writeFile(blob, filename);
     if (fsaOk) {
