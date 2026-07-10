@@ -70,7 +70,7 @@
     const m = Math.floor((sec % 3600) / 60);
     const s = Math.floor(sec % 60);
     const p = n => String(n).padStart(2, '0');
-    return h > 0 ? `${p(h)}_${p(m)}_${p(s)}` : `${p(m)}_${p(s)}`;
+    return h > 0 ? `${p(h)}-${p(m)}-${p(s)}` : `${p(m)}-${p(s)}`;
   }
 
   // ── White iOS notification ──────────────────────────────────────────────────
