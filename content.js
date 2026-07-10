@@ -288,16 +288,12 @@
                  display:flex;flex-direction:column;align-items:center;gap:3px;
                  cursor:pointer;transition:all 0.15s;user-select:none;">
           <span style="font-size:14px;font-weight:800;letter-spacing:0.03em;">JPG</span>
-          <span style="font-size:9px;color:#ff9f0a;font-weight:600;
-                       background:#fff7ec;border:1px solid #ffe5b4;border-radius:4px;padding:1px 5px;">LOSSY</span>
         </div>
         <div id="fc-fmt-tif" class="fc-fmt-card" data-fmt="tif"
           style="padding:9px 6px;border-radius:10px;border:1.5px solid;
                  display:flex;flex-direction:column;align-items:center;gap:3px;
                  cursor:pointer;transition:all 0.15s;user-select:none;">
           <span style="font-size:14px;font-weight:800;letter-spacing:0.03em;">TIF</span>
-          <span style="font-size:9px;color:#34c759;font-weight:600;
-                       background:#edfaf2;border:1px solid #c3f0d0;border-radius:4px;padding:1px 5px;">LOSSLESS</span>
         </div>
       </div>
 
