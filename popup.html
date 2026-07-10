@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Frame Catcher</title>
@@ -197,20 +197,20 @@
 <!-- Tab Bar -->
 <div class="tab-bar">
   <div class="tab active" data-tab="format" id="tab-format">Format</div>
-  <div class="tab"        data-tab="settings" id="tab-settings">⚙ Ayarlar</div>
+  <div class="tab"        data-tab="settings" id="tab-settings">⚙ Settings</div>
 </div>
 
 <!-- Panel: Format -->
 <div class="panel active" id="panel-format">
 
   <div>
-    <div class="s-label">Çıktı Formatı</div>
+    <div class="s-label">Output Format</div>
     <div class="format-grid">
       <div class="format-card">
         <input type="radio" name="format" id="fmt-tif" value="tif">
         <label for="fmt-tif">
           <div class="fmt-badge">TIF</div>
-          <div class="fmt-name">Kayıpsız</div>
+          <div class="fmt-name">Lossless</div>
           <span class="fmt-tag tag-loss">LOSSLESS</span>
         </label>
       </div>
@@ -218,7 +218,7 @@
         <input type="radio" name="format" id="fmt-jpg" value="jpg">
         <label for="fmt-jpg">
           <div class="fmt-badge">JPG</div>
-          <div class="fmt-name">Sıkıştırılmış</div>
+          <div class="fmt-name">Compressed</div>
           <span class="fmt-tag tag-comp">LOSSY</span>
         </label>
       </div>
@@ -226,7 +226,7 @@
   </div>
 
   <div class="quality-wrap" id="quality-wrap">
-    <div class="s-label">JPG Kalitesi</div>
+    <div class="s-label">JPG Quality</div>
     <div class="slider-row">
       <input type="range" id="jpg-quality" min="60" max="100" value="95" step="1">
       <span class="q-val" id="q-display">95</span>
@@ -237,7 +237,7 @@
 
   <div class="status" id="status">
     <div class="status-dot"></div>
-    <span class="status-msg" id="status-msg">YouTube sayfası bekleniyor…</span>
+    <span class="status-msg" id="status-msg">Waiting for YouTube tab…</span>
   </div>
 
 </div>
@@ -247,13 +247,13 @@
 
   <!-- Save Folder -->
   <div class="field">
-    <div class="s-label">Kayıt Klasörü</div>
+    <div class="s-label">Save Folder</div>
     <div class="field-row">
       <input class="inp" type="text" id="save-folder"
              placeholder="YouTube Frames" spellcheck="false">
     </div>
     <div class="folder-hint">
-      İndirilenler / <span id="folder-preview">YouTube Frames</span> / ...
+      Downloads / <span id="folder-preview">YouTube Frames</span> / ...
     </div>
   </div>
 
@@ -261,11 +261,11 @@
 
   <!-- Keyboard Shortcut -->
   <div class="field">
-    <div class="s-label">Klavye Kısayolu</div>
+    <div class="s-label">Keyboard Shortcut</div>
     <div class="shortcut-box" id="shortcut-box">
-      <span class="shortcut-label-text" id="shortcut-label">Aktif kısayol</span>
+      <span class="shortcut-label-text" id="shortcut-label">Active shortcut</span>
       <span class="kbd-badge" id="kbd-display"><span id="kbd-key">P</span></span>
-      <button class="rec-btn" id="rec-btn">Değiştir</button>
+      <button class="rec-btn" id="rec-btn">Change</button>
     </div>
   </div>
 
@@ -273,14 +273,14 @@
 
   <div class="status" id="status2">
     <div class="status-dot"></div>
-    <span class="status-msg" id="status-msg2">YouTube sayfası bekleniyor…</span>
+    <span class="status-msg" id="status-msg2">Waiting for YouTube tab…</span>
   </div>
 
 </div>
 
 <!-- Footer -->
 <div class="footer" style="margin-top:4px;">
-  <button class="save-btn" id="save-btn">Kaydet &amp; Uygula</button>
+  <button class="save-btn" id="save-btn">Save &amp; Apply</button>
 </div>
 
 <script src="popup.js"></script>

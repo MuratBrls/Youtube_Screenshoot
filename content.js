@@ -175,7 +175,7 @@
   // ── Capture ────────────────────────────────────────────────────────────────
   async function captureFrame() {
     const video = document.querySelector('video');
-    if (!video || !video.videoWidth) { notify('Video bulunamadı', false); return; }
+    if (!video || !video.videoWidth) { notify('Video not found', false); return; }
 
     const timeLabel = fmtTime(video.currentTime || 0);
 
@@ -197,7 +197,7 @@
     const ctx = canvas.getContext('2d');
 
     try { ctx.drawImage(video, 0, 0, W, H); }
-    catch (e) { notify('Frame yakalanamadı', false); return; }
+    catch (e) { notify('Frame capture failed', false); return; }
 
     let blob, ext;
     try {
@@ -210,7 +210,7 @@
         ext  = 'jpg';
       } else {
         if (typeof UTIF === 'undefined') {
-          notify('TIF encoder yok → JPG olarak kaydediliyor', false);
+          notify('No TIF encoder → saving as JPG', false);
           const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
           const bin = atob(dataUrl.split(',')[1]);
           const u8  = new Uint8Array(bin.length);
@@ -225,14 +225,14 @@
         }
       }
     } catch (e) {
-      notify('Encode hatası: ' + e.message, false); return;
+      notify('Encoding error: ' + e.message, false); return;
     }
 
     const filename = `${sanitize(channel)}_${sanitize(title)}_${timeLabel}.${ext}`;
 
     const fsaOk = await writeFile(blob, filename);
     if (fsaOk) {
-      const folderName = (await idbGet('dirName')) || 'klasör';
+      const folderName = (await idbGet('dirName')) || 'folder';
       notify(`${filename}  →  ${folderName}`, true);
     } else {
       fallbackDownload(blob, filename);
@@ -274,7 +274,7 @@
     p.innerHTML = `
       <!-- Header -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <span style="font-weight:700;font-size:13px;color:#1c1c1e;">Ayarlar</span>
+        <span style="font-weight:700;font-size:13px;color:#1c1c1e;">Settings</span>
         <div id="fc-close" style="width:22px;height:22px;background:#f2f2f7;border-radius:50%;
                                     display:flex;align-items:center;justify-content:center;
                                     cursor:pointer;font-size:11px;color:#8e8e93;user-select:none;">✕</div>
@@ -298,7 +298,7 @@
       </div>
 
       <!-- Folder -->
-      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#8e8e93;margin-bottom:7px;">Kayıt Klasörü</div>
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#8e8e93;margin-bottom:7px;">Save Folder</div>
       <div id="fc-folder-btn"
         style="display:flex;align-items:center;gap:8px;padding:9px 11px;
                background:#f2f2f7;border-radius:10px;cursor:pointer;
@@ -309,7 +309,7 @@
         </svg>
         <span id="fc-folder-name" style="flex:1;font-size:11.5px;color:#3a3a3c;
               overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;">
-          Seçilmedi
+          Not Selected
         </span>
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
              stroke="#c7c7cc" stroke-width="2.5" stroke-linecap="round">
@@ -317,14 +317,14 @@
         </svg>
       </div>
       <div id="fc-folder-hint" style="font-size:10px;color:#c7c7cc;margin-top:4px;padding-left:2px;">
-        Tıkla ve klasör seç — bir kez yeter
+        Click to choose folder — once is enough
       </div>
 
       <!-- Divider -->
       <div style="height:1px;background:#f2f2f7;margin:12px 0;"></div>
 
       <!-- Shortcut -->
-      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#8e8e93;margin-bottom:7px;">Kısayol</div>
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#8e8e93;margin-bottom:7px;">Shortcut</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <div id="fc-kbd"
           style="flex:1;text-align:center;padding:8px;border-radius:9px;
@@ -337,10 +337,10 @@
           style="padding:8px 12px;border:1.5px solid #e5e5ea;border-radius:9px;
                  background:#fff;color:#1c1c1e;font-family:inherit;font-size:11.5px;
                  font-weight:500;cursor:pointer;white-space:nowrap;outline:none;">
-          Değiştir
+          Change
         </button>
       </div>
-      <div id="fc-rec-hint" style="font-size:10px;color:#c7c7cc;margin-top:5px;padding-left:2px;">P tuşuna bas → yakala</div>
+      <div id="fc-rec-hint" style="font-size:10px;color:#c7c7cc;margin-top:5px;padding-left:2px;">Press key → capture</div>
     `;
 
     document.body.appendChild(p);
@@ -386,7 +386,7 @@
     idbGet('dirName').then(name => {
       if (name) {
         folderName.textContent = name;
-        folderHint.textContent = `"${name}" klasörüne kaydedilecek`;
+        folderHint.textContent = `Will save to "${name}"`;
       }
     });
 
@@ -402,19 +402,19 @@
     folderBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
       folderBtn.style.borderColor = '#007aff';
-      folderName.textContent = 'Seçiliyor…';
+      folderName.textContent = 'Choosing…';
 
       const handle = await pickFolder();
       if (handle) {
         folderName.textContent = handle.name;
-        folderHint.textContent = `"${handle.name}" klasörüne kaydedilecek`;
+        folderHint.textContent = `Will save to "${handle.name}"`;
         folderHint.style.color = '#34c759';
         setTimeout(() => { folderHint.style.color = '#c7c7cc'; }, 2000);
         folderBtn.style.borderColor = '#34c759';
         setTimeout(() => { folderBtn.style.borderColor = '#f2f2f7'; }, 1500);
       } else {
         const storedName = await idbGet('dirName');
-        folderName.textContent = storedName || 'Seçilmedi';
+        folderName.textContent = storedName || 'Not Selected';
         folderBtn.style.borderColor = '#f2f2f7';
       }
     });
@@ -427,7 +427,7 @@
     chrome.storage.local.get(['shortcutKey'], (d) => {
       const k = (d.shortcutKey || 'p').toUpperCase();
       kbdEl.textContent = k;
-      recHint.textContent = k + ' tuşuna bas → yakala';
+      recHint.textContent = 'Press ' + k + ' → capture';
     });
 
     let recording = false;
@@ -438,8 +438,8 @@
         kbdEl.textContent = '·';
         kbdEl.style.borderColor = '#007aff';
         kbdEl.style.color = '#007aff';
-        recBtn.textContent = 'İptal';
-        recHint.textContent = 'Herhangi bir tuşa bas…';
+        recBtn.textContent = 'Cancel';
+        recHint.textContent = 'Press any key…';
         recHint.style.color = '#007aff';
         p.setAttribute('tabindex', '-1');
         p.focus();
@@ -447,8 +447,8 @@
         kbdEl.style.borderColor = '#e5e5ea';
         kbdEl.style.color = '#1c1c1e';
         kbdEl.textContent = prefs.shortcutKey.toUpperCase();
-        recBtn.textContent = 'Değiştir';
-        recHint.textContent = kbdEl.textContent + ' tuşuna bas → yakala';
+        recBtn.textContent = 'Change';
+        recHint.textContent = 'Press ' + kbdEl.textContent + ' → capture';
         recHint.style.color = '#c7c7cc';
       }
     });
@@ -466,8 +466,8 @@
       kbdEl.textContent = k.toUpperCase();
       kbdEl.style.borderColor = '#34c759';
       kbdEl.style.color = '#1c1c1e';
-      recBtn.textContent = 'Değiştir';
-      recHint.textContent = k.toUpperCase() + ' tuşuna bas → yakala';
+      recBtn.textContent = 'Change';
+      recHint.textContent = 'Press ' + k.toUpperCase() + ' → capture';
       recHint.style.color = '#34c759';
       setTimeout(() => {
         kbdEl.style.borderColor = '#e5e5ea';
@@ -495,7 +495,7 @@
     if (!controls) return;
 
     controls.insertBefore(
-      makeBtn('yt-fc-settings-btn', 'Frame Catcher — Ayarlar',
+      makeBtn('yt-fc-settings-btn', 'Frame Catcher — Settings',
         `<svg viewBox="0 0 24 24" width="20" height="20" fill="white" style="opacity:0.78">
           <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61
                    l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54
@@ -514,7 +514,7 @@
     );
 
     controls.insertBefore(
-      makeBtn('yt-fc-btn', 'Frame Catcher — Yakala',
+      makeBtn('yt-fc-btn', 'Frame Catcher — Capture',
         `<svg viewBox="0 0 36 36" width="100%" height="100%" fill="white">
           <path d="M27,11L24.5,11L23,8.5C22.7,8,22.1,7.7,21.5,7.7L14.5,7.7
                    C13.9,7.7,13.3,8,13,8.5L11.5,11L9,11C7.3,11,6,12.3,6,14L6,24

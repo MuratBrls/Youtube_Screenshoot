@@ -68,9 +68,9 @@
     statusEls.forEach(({ banner, msg }) => {
       if (isWatch) {
         banner.classList.add('ready');
-        msg.textContent = 'YouTube videosu algılandı — hazır!';
+        msg.textContent = 'YouTube video detected — ready!';
       } else {
-        msg.textContent = 'YouTube video sayfasına git.';
+        msg.textContent = 'Navigate to a YouTube video page.';
       }
     });
   });
@@ -106,9 +106,9 @@
     if (recording) return;
     recording = true;
     shortcutBox.classList.add('recording');
-    shortcutLabel.textContent = 'Bir tuşa bas…';
+    shortcutLabel.textContent = 'Press a key…';
     kbdKey.textContent = '?';
-    recBtn.textContent = 'İptal';
+    recBtn.textContent = 'Cancel';
 
     recBtn.addEventListener('click', cancelRecording, { once: true });
   });
@@ -116,8 +116,8 @@
   function cancelRecording() {
     recording = false;
     shortcutBox.classList.remove('recording');
-    shortcutLabel.textContent = 'Aktif kısayol';
-    recBtn.textContent = 'Değiştir';
+    shortcutLabel.textContent = 'Active shortcut';
+    recBtn.textContent = 'Change';
     // Restore current saved key
     chrome.storage.local.get(['shortcutKey'], (d) => {
       kbdKey.textContent = (d.shortcutKey || 'p').toUpperCase();
@@ -137,9 +137,9 @@
 
     const key = e.key.toLowerCase();
     kbdKey.textContent = key.toUpperCase();
-    shortcutLabel.textContent = 'Aktif kısayol';
+    shortcutLabel.textContent = 'Active shortcut';
     shortcutBox.classList.remove('recording');
-    recBtn.textContent = 'Değiştir';
+    recBtn.textContent = 'Change';
     recording = false;
 
     // Save immediately
