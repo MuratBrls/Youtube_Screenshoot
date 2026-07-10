@@ -1,110 +1,67 @@
-# 🎬 YouTube Frame Catcher & Metadata Stamper
+# 🎬 YouTube Frame Catcher & Metadata Stamper (v1.4)
 
-A lightweight Chrome/Edge extension that captures the current YouTube video frame at **native resolution** (1080p, 4K, etc.) and saves it as a **lossless TIF** or **compressed JPG** — with all metadata embedded directly in the filename.
+YouTube videolarından **orijinal çözünürlükte** (1080p, 4K vb.) kayıpsız TIF veya JPG formatında tek tıkla ekran görüntüsü alan, klavye kısayolu destekleyen ve dosyaları doğrudan seçtiğiniz klasöre kaydeden modern bir tarayıcı eklentisi.
 
-![Chrome](https://img.shields.io/badge/Chrome-88%2B-4285F4?logo=google-chrome&logoColor=white)
-![Edge](https://img.shields.io/badge/Edge-88%2B-0078D7?logo=microsoft-edge&logoColor=white)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-green)
+![Compatibility](https://img.shields.io/badge/OS-Windows%20%7C%20macOS-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ---
 
-## ✨ Features
+## ✨ Özellikler
 
-- 📷 **One-click frame capture** — injects a camera button directly into YouTube's player controls
-- 🖼️ **Native resolution** — captures at the actual video resolution (1920×1080, 3840×2160, etc.)
-- 🗂️ **TIF (lossless)** — perfect for Premiere Pro / After Effects color grading and masking
-- 📦 **JPG (compressed)** — adjustable quality (60–100%) for lightweight reference shots
-- 🏷️ **Metadata in filename** — `Channel_Title_HH-MM-SS.tif` — zero watermark on the image itself
-- ⚡ **SPA-aware** — survives YouTube's single-page navigation between videos
-- 🚫 **No server, no tracking** — 100% client-side, runs entirely in the browser
+- 📷 **Tek Tıkla Yakalama** — YouTube oynatıcı kontrollerine entegre kamera butonu.
+- ⚙️ **Oynatıcı İçi Ayarlar** — Oynatıcıdaki çark simgesiyle anında açılan minimalist ayarlar paneli.
+- 📁 **Doğrudan Klasör Seçimi (FSA API)** — İndirilenler klasörünü her seferinde sormaz. İstediğiniz herhangi bir klasörü bir kez seçin, doğrudan oraya kaydetsin.
+- ⌨️ **Kişiselleştirilebilir Kısayol** — İstediğiniz tuşu (Varsayılan `P`) kısayol olarak atayın.
+- 🖼️ **Format Seçimi** — Kayıpsız **TIF** veya sıkıştırılmış **JPG** formatları panelden değiştirilebilir.
+- 🏷️ **Temiz Dosya Adı** — Görsel üzerinde hiçbir logo/yazı barındırmaz. Dosya ismini otomatik oluşturur: `KanalAdı_VideoBaşlığı_Dakika-Saniye.jpg`.
+- ☁️ **iOS Tarzı Minimal Bildirim** — Ekran görüntüsü alındığında sağ üst köşeden kayarak çıkan modern beyaz bildirim.
 
 ---
 
-## 📁 Project Structure
+## 📁 Proje Yapısı
 
 ```
 Youtube_Screenshoot/
-├── manifest.json       ← Manifest V3 — permissions & config
-├── content.js          ← Core logic injected into YouTube
-├── popup.html          ← Settings UI (format selector + quality slider)
-├── popup.js            ← Storage read/write logic
-├── utif.js             ← UTIF.js — lossless TIF encoder (by Photopea)
-└── icons/
-    ├── icon16.png
-    ├── icon48.png
-    └── icon128.png
+├── manifest.json       ← Eklenti ayarları ve izinler (Manifest V3)
+├── content.js          ← YouTube oynatıcısına butonu ve paneli enjekte eden ana kod
+├── background.js       ← İndirme işlemlerini yöneten servis
+├── utif.js             ← Fotopea tarafından geliştirilen kayıpsız TIF kodlayıcı
+├── popup.html          ← Eklenti üst bar popup arayüzü
+├── popup.js            ← Popup kontrol mantığı
+└── icons/              ← Eklenti logoları
 ```
 
 ---
 
-## 🚀 Installation (No build step needed)
+## 🚀 Kurulum (Windows / macOS)
 
-> Works on **Windows** and **macOS** — Chrome or Edge.
+Eklentiyi tarayıcınıza yüklemek için:
 
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/MuratBrls/Youtube_Screenshoot.git
-```
-
-### 2. Load in Chrome / Edge
-
-1. Go to `chrome://extensions/` (or `edge://extensions/`)
-2. Enable **Developer mode** (top-right toggle)
-3. Click **"Load unpacked"**
-4. Select the cloned `Youtube_Screenshoot` folder
-5. ✅ Extension is active immediately
+1. Bu depoyu bilgisayarınıza indirin (veya klonlayın):
+   ```bash
+   git clone https://github.com/MuratBrls/Youtube_Screenshoot.git
+   ```
+2. Tarayıcınızda (Chrome veya Edge) `chrome://extensions/` adresine gidin.
+3. Sağ üstteki **Geliştirici Modu (Developer Mode)** seçeneğini aktif hale getirin.
+4. Sol üstteki **Paketlenmemiş öğe yükle (Load unpacked)** butonuna tıklayın.
+5. Klonladığınız/indirdiğiniz klasörü seçin.
+6. Eklenti hemen aktif olacaktır.
 
 ---
 
-## 🎯 How to Use
+## ⚙️ Nasıl Kullanılır?
 
-### Select Output Format
-Click the **Frame Catcher** icon in the browser toolbar → choose **TIF** or **JPG** → set JPG quality if needed → click **"Kaydet & Uygula"**.
-
-### Capture a Frame
-1. Open any YouTube video
-2. Pause or scrub to the exact frame you want
-3. Click the **📷 camera icon** in the player's right control bar
-4. File downloads instantly
-
-### Output Filename Format
-```
-ChannelName_VideoTitle_HH-MM-SS.tif
-```
-Example:
-```
-Kurzgesagt_The_Fermi_Paradox_00-14-37.tif
-```
+1. Herhangi bir YouTube videosu açın.
+2. Video kontrollerinin sağ tarafına gelen **çark (⚙️) simgesine** tıklayın.
+3. **Kayıt Klasörü** alanına tıklayarak bilgisayarınızdan ekran resimlerinin kaydedileceği klasörü seçin (Bu klasör IndexedDB üzerinde güvenli bir şekilde saklanır).
+4. İstediğiniz **Formatı (JPG / TIF)** ve kullanmak istediğiniz **Kısayolu** belirleyin.
+5. Ekran görüntüsü almak için **Kamera (📷) simgesine** veya atadığınız kısayol tuşuna (örneğin **P**) basın.
+6. Sağ üstte çıkacak şık bildirimle görseliniz doğrudan seçtiğiniz klasöre kaydedilecektir.
 
 ---
 
-## 🖼️ Format Guide
+## 📄 Lisans
 
-| Format | Use Case | Quality |
-|--------|----------|---------|
-| **TIF** | Color grading, masking, compositing in Premiere / After Effects | Lossless — pixel perfect |
-| **JPG** | Quick reference, mood boards, lightweight sharing | Adjustable 60–100% |
-
----
-
-## ⚙️ Technical Details
-
-| Feature | Detail |
-|---------|--------|
-| TIF Encoder | [UTIF.js](https://github.com/photopea/UTIF.js) by Photopea |
-| Capture API | `HTMLCanvasElement.drawImage()` |
-| Storage | `chrome.storage.local` |
-| Navigation | Intercepts `history.pushState` for SPA support |
-| Permissions | `storage`, `downloads`, `activeTab`, `tabs` |
-
----
-
-## 📄 License
-
-MIT — free to use, modify, and distribute.
-
----
-
-> **Tip:** After updating any file, go to `chrome://extensions/` and click the **↺ reload** button on the extension card to apply changes.
+MIT — İstediğiniz gibi kullanabilir, değiştirebilir ve dağıtabilirsiniz.
