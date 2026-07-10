@@ -219,7 +219,7 @@
       notify('Encode hatası: ' + e.message, false); return;
     }
 
-    const filename = `youtube.com_watch_v=${videoId}&t=${seconds}s.${ext}`;
+    const filename = `youtu.be_${videoId}_t=${seconds}.${ext}`;
 
     const fsaOk = await writeFile(blob, filename);
     if (fsaOk) {
