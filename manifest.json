@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "YouTube Frame Catcher & Metadata Stamper",
-  "version": "1.1.0",
-  "description": "Captures YouTube video frames at native resolution. Saves as lossless TIF or JPG to a chosen folder — no dialogs.",
+  "version": "1.2.0",
+  "description": "Captures YouTube video frames at native resolution. Saves as lossless TIF or JPG to a chosen folder.",
   "permissions": [
     "storage",
     "downloads",
@@ -25,20 +25,14 @@
   },
   "content_scripts": [
     {
-      "matches":   ["https://www.youtube.com/*"],
-      "js":        ["content.js"],
-      "run_at":    "document_idle"
+      "matches":  ["https://www.youtube.com/*"],
+      "js":       ["utif.js", "content.js"],
+      "run_at":   "document_idle"
     }
   ],
   "icons": {
     "16":  "icons/icon16.png",
     "48":  "icons/icon48.png",
     "128": "icons/icon128.png"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["utif.js"],
-      "matches":   ["https://www.youtube.com/*"]
-    }
-  ]
+  }
 }
