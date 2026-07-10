@@ -70,7 +70,7 @@
     const m = Math.floor((sec % 3600) / 60);
     const s = Math.floor(sec % 60);
     const p = n => String(n).padStart(2, '0');
-    return h > 0 ? `${p(h)}-${p(m)}-${p(s)}` : `${p(m)}-${p(s)}`;
+    return h > 0 ? `${p(h)}_${p(m)}_${p(s)}` : `${p(m)}_${p(s)}`;
   }
 
   // ── White iOS notification ──────────────────────────────────────────────────
@@ -177,10 +177,19 @@
     const video = document.querySelector('video');
     if (!video || !video.videoWidth) { notify('Video bulunamadı', false); return; }
 
-    // Video ID + exact second → reconstructable YouTube link
-    // e.g.  dQw4w9WgXcQ_t553s.jpg  →  https://youtu.be/dQw4w9WgXcQ?t=553
-    const videoId = new URLSearchParams(location.search).get('v') || 'video';
-    const seconds = Math.floor(video.currentTime || 0);
+    const timeLabel = fmtTime(video.currentTime || 0);
+
+    const titleEl =
+      document.querySelector('h1.ytd-watch-metadata yt-formatted-string') ||
+      document.querySelector('#title h1 yt-formatted-string') ||
+      document.querySelector('ytd-watch-metadata h1');
+    const chanEl =
+      document.querySelector('ytd-channel-name #text a') ||
+      document.querySelector('#channel-name #text a') ||
+      document.querySelector('#owner-name a');
+
+    const title   = titleEl ? titleEl.textContent.trim() : 'Video';
+    const channel = chanEl  ? chanEl.textContent.trim()  : 'Channel';
 
     const W = video.videoWidth, H = video.videoHeight;
     const canvas = document.createElement('canvas');
@@ -219,7 +228,7 @@
       notify('Encode hatası: ' + e.message, false); return;
     }
 
-    const filename = `youtu.be_${videoId}_t=${seconds}.${ext}`;
+    const filename = `${sanitize(channel)}_${sanitize(title)}_${timeLabel}.${ext}`;
 
     const fsaOk = await writeFile(blob, filename);
     if (fsaOk) {
