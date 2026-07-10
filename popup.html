@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frame Catcher Settings</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      width: 300px;
+      background: #0f0f0f;
+      color: #f1f1f1;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #ff0000 0%, #cc0000 50%, #990000 100%);
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(255,255,255,0.08) 0%, transparent 60%);
+    }
+
+    .header-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .header-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    .header-text h1 {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .header-text p {
+      font-size: 10px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    /* ── Body ── */
+    .body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Format Selector */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .format-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .format-card {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .format-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .format-card label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 10px;
+      border-radius: 12px;
+      border: 1.5px solid #2a2a2a;
+      background: #1a1a1a;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .format-card label:hover {
+      border-color: #444;
+      background: #222;
+    }
+
+    .format-card input:checked + label {
+      border-color: #ff0000;
+      background: linear-gradient(135deg, rgba(255,0,0,0.12), rgba(204,0,0,0.06));
+      box-shadow: 0 0 0 1px rgba(255,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .format-badge {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .format-card input:checked + label .format-badge {
+      color: #ff4444;
+    }
+
+    .format-card input:not(:checked) + label .format-badge {
+      color: #888;
+    }
+
+    .format-name {
+      font-size: 10px;
+      font-weight: 500;
+      color: #888;
+      line-height: 1.3;
+    }
+
+    .format-card input:checked + label .format-name {
+      color: #ccc;
+    }
+
+    .format-tag {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-lossless {
+      background: rgba(0, 200, 100, 0.15);
+      color: #00c864;
+      border: 1px solid rgba(0, 200, 100, 0.25);
+    }
+
+    .tag-lossy {
+      background: rgba(255, 165, 0, 0.15);
+      color: #ffa500;
+      border: 1px solid rgba(255, 165, 0, 0.25);
+    }
+
+    /* Quality Slider (JPG) */
+    .quality-section {
+      transition: opacity 0.3s, max-height 0.3s;
+      overflow: hidden;
+    }
+
+    .quality-section.hidden {
+      opacity: 0;
+      max-height: 0;
+      pointer-events: none;
+    }
+
+    .quality-section.visible {
+      opacity: 1;
+      max-height: 80px;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #ff0000 0%, #ff0000 var(--val, 95%), #2a2a2a var(--val, 95%));
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ff0000;
+      border: 2px solid #ff4444;
+      box-shadow: 0 0 6px rgba(255,0,0,0.4);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .quality-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ff4444;
+      min-width: 30px;
+      text-align: right;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+    }
+
+    /* Status Banner */
+    .status-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      font-size: 11px;
+      color: #888;
+      transition: all 0.3s ease;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #444;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .status-banner.ready .status-dot {
+      background: #00c864;
+      box-shadow: 0 0 6px rgba(0,200,100,0.5);
+    }
+
+    .status-banner.ready {
+      border-color: rgba(0,200,100,0.2);
+    }
+
+    .status-banner.ready .status-text {
+      color: #aaa;
+    }
+
+    /* Shortcut info */
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #161616;
+      border-radius: 8px;
+      border: 1px solid #222;
+    }
+
+    .shortcut-label {
+      font-size: 10px;
+      color: #666;
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      color: #aaa;
+    }
+
+    .kbd span {
+      background: #2a2a2a;
+      border: 1px solid #3a3a3a;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-weight: 600;
+      font-family: monospace;
+      line-height: 1.4;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 10px 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .save-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+
+    .save-btn:hover::before {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+
+    .save-btn.saved {
+      background: linear-gradient(135deg, #00c864, #00a050);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 4h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm8 3.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Frame Catcher</h1>
+      <p>YouTube Metadata Stamper</p>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+
+    <!-- Format Select -->
+    <div>
+      <div class="section-label">Çıktı Formatı</div>
+      <div class="format-grid">
+
+        <div class="format-card">
+          <input type="radio" name="format" id="fmt-tif" value="tif" />
+          <label for="fmt-tif">
+            <div class="format-badge">TIF</div>
+            <div class="format-name">Kayıpsız</div>
+            <span class="format-tag tag-lossless">LOSSLESS</span>
+          </label>
+        </div>
+
+        <div class="format-card">
+          <input type="radio" name="format" id="fmt-jpg" value="jpg" />
+          <label for="fmt-jpg">
+            <div class="format-badge">JPG</div>
+            <div class="format-name">Sıkıştırılmış</div>
+            <span class="format-tag tag-lossy">LOSSY</span>
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- JPG Quality (conditional) -->
+    <div class="quality-section hidden" id="quality-section">
+      <div class="section-label">JPG Kalitesi</div>
+      <div class="slider-row">
+        <input type="range" id="jpg-quality" min="60" max="100" value="95" step="1" />
+        <span class="quality-value" id="quality-display">95</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Status -->
+    <div class="status-banner" id="status-banner">
+      <div class="status-dot"></div>
+      <span class="status-text" id="status-text">YouTube sayfası bekleniyor…</span>
+    </div>
+
+    <!-- Keyboard Shortcut Info -->
+    <div class="shortcut-row">
+      <span class="shortcut-label">Kısayol (yakında)</span>
+      <span class="kbd"><span>Alt</span>+<span>S</span></span>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <button class="save-btn" id="save-btn">Kaydet &amp; Uygula</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

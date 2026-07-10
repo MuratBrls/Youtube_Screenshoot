@@ -1,0 +1,19 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.suo
+*.user
+.vscode/
+.idea/
+
+# Node (if any tools are used)
+node_modules/
+npm-debug.log*
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+*.bak
