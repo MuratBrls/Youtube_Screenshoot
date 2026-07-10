@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Frame Catcher & Metadata Stamper",
+  "name": "YouTube Screenshot Studio",
   "version": "1.2.0",
   "description": "Captures YouTube video frames at native resolution. Saves as lossless TIF or JPG to a chosen folder.",
   "permissions": [
