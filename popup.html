@@ -9,85 +9,84 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      width: 310px;
-      background: #111112;
-      color: #f1f1f1;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      width: 280px;
+      background: #ffffff;
+      color: #1c1c1e;
       overflow: hidden;
     }
 
     /* ── Header ── */
     .header {
       background: linear-gradient(135deg, #c80000 0%, #ff0000 60%, #ff3232 100%);
-      padding: 16px 18px 13px;
-      display: flex; align-items: center; gap: 11px;
+      padding: 14px 16px 12px;
+      display: flex; align-items: center; gap: 10px;
       position: relative; overflow: hidden;
     }
     .header::before {
       content:''; position:absolute; inset:0;
-      background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.12) 0%, transparent 60%);
     }
     .header-icon {
-      width:34px; height:34px; flex-shrink:0;
-      background:rgba(255,255,255,0.14);
-      border:1px solid rgba(255,255,255,0.2);
-      border-radius:9px; display:flex; align-items:center; justify-content:center;
+      width:32px; height:32px; flex-shrink:0;
+      background:rgba(255,255,255,0.18);
+      border:1px solid rgba(255,255,255,0.25);
+      border-radius:8px; display:flex; align-items:center; justify-content:center;
       backdrop-filter:blur(8px);
     }
-    .header-icon svg { width:18px; height:18px; fill:white; }
+    .header-icon svg { width:16px; height:16px; fill:white; }
     .header-text h1 { font-size:13px; font-weight:700; color:white; letter-spacing:0.01em; }
     .header-text p  { font-size:10px; color:rgba(255,255,255,0.65); margin-top:1px; }
 
     /* ── Tab Bar ── */
     .tab-bar {
-      display:flex; background:#0a0a0b;
-      border-bottom:1px solid #1e1e20;
+      display:flex; background:#f2f2f7;
+      border-bottom:1px solid #e5e5ea;
     }
     .tab {
-      flex:1; padding:10px 0; text-align:center;
-      font-size:11.5px; font-weight:500; color:#666;
+      flex:1; padding:9px 0; text-align:center;
+      font-size:11.5px; font-weight:500; color:#8e8e93;
       cursor:pointer; border-bottom:2px solid transparent;
       transition:color 0.2s, border-color 0.2s;
       letter-spacing:0.02em;
     }
-    .tab:hover { color:#aaa; }
-    .tab.active { color:#ff4040; border-bottom-color:#ff0000; }
+    .tab:hover { color:#3a3a3c; }
+    .tab.active { color:#ff3b30; border-bottom-color:#ff3b30; background:#fff; }
 
     /* ── Tab Content ── */
-    .panel { display:none; padding:16px 18px; flex-direction:column; gap:14px; }
+    .panel { display:none; padding:14px 15px; flex-direction:column; gap:13px; }
     .panel.active { display:flex; }
 
     /* ── Section label ── */
     .s-label {
-      font-size:10px; font-weight:600; letter-spacing:0.08em;
-      text-transform:uppercase; color:#555; margin-bottom:7px;
+      font-size:10px; font-weight:600; letter-spacing:0.07em;
+      text-transform:uppercase; color:#8e8e93; margin-bottom:7px;
     }
 
     /* ── Format Cards ── */
-    .format-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .format-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
     .format-card { position:relative; cursor:pointer; }
     .format-card input[type="radio"] { position:absolute; opacity:0; pointer-events:none; }
     .format-card label {
-      display:flex; flex-direction:column; align-items:center; gap:5px;
-      padding:13px 8px; border-radius:11px;
-      border:1.5px solid #202022; background:#181819;
-      cursor:pointer; transition:all 0.2s;
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      padding:11px 6px; border-radius:10px;
+      border:1.5px solid #e5e5ea; background:#fff;
+      cursor:pointer; transition:all 0.15s;
     }
-    .format-card label:hover { border-color:#333; background:#1f1f21; }
+    .format-card label:hover { border-color:#d1d1d6; background:#f8f8f8; }
     .format-card input:checked + label {
-      border-color:#cc0000;
-      background:linear-gradient(135deg,rgba(255,0,0,0.1),rgba(180,0,0,0.04));
-      box-shadow:0 0 0 1px rgba(255,0,0,0.2);
+      border-color:#007aff;
+      background:#f0f6ff;
     }
-    .fmt-badge { font-size:15px; font-weight:800; color:#555; letter-spacing:0.04em; transition:color 0.2s; }
-    .format-card input:checked + label .fmt-badge { color:#ff4040; }
-    .fmt-name { font-size:10px; font-weight:500; color:#555; }
-    .format-card input:checked + label .fmt-name { color:#bbb; }
+    .fmt-badge { font-size:14px; font-weight:800; color:#8e8e93; letter-spacing:0.03em; transition:color 0.15s; }
+    .format-card input:checked + label .fmt-badge { color:#007aff; }
+    .fmt-name { font-size:10px; font-weight:500; color:#c7c7cc; }
+    .format-card input:checked + label .fmt-name { color:#3a3a3c; }
     .fmt-tag {
       font-size:9px; font-weight:600; padding:2px 6px; border-radius:4px; letter-spacing:0.04em;
     }
-    .tag-loss  { background:rgba(48,209,88,0.1); color:#30d158; border:1px solid rgba(48,209,88,0.2); }
-    .tag-comp  { background:rgba(255,165,0,0.1); color:#ff9f0a; border:1px solid rgba(255,165,0,0.2); }
+    .tag-loss  { background:rgba(52,199,89,0.1); color:#34c759; border:1px solid rgba(52,199,89,0.2); }
+    .tag-comp  { background:rgba(255,149,0,0.1); color:#ff9500; border:1px solid rgba(255,149,0,0.2); }
 
     /* ── Quality Slider ── */
     .quality-wrap { overflow:hidden; max-height:0; opacity:0; transition:max-height 0.3s, opacity 0.3s; }
@@ -96,89 +95,80 @@
     input[type="range"] {
       flex:1; height:3px; -webkit-appearance:none;
       border-radius:4px; outline:none; cursor:pointer;
-      background: linear-gradient(to right, #ff0000 0%, #ff0000 var(--pct,95%), #282828 var(--pct,95%));
+      background: linear-gradient(to right, #007aff 0%, #007aff var(--pct,95%), #e5e5ea var(--pct,95%));
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance:none; width:15px; height:15px; border-radius:50%;
-      background:#ff2020; border:2px solid #ff4444;
-      box-shadow:0 0 5px rgba(255,0,0,0.4); cursor:pointer;
+      background:#007aff; border:2px solid #fff;
+      box-shadow:0 1px 4px rgba(0,122,255,0.35); cursor:pointer;
       transition:transform 0.1s;
     }
     input[type="range"]::-webkit-slider-thumb:hover { transform:scale(1.2); }
-    .q-val { font-size:12px; font-weight:700; color:#ff4040; min-width:28px; text-align:right; }
+    .q-val { font-size:12px; font-weight:700; color:#007aff; min-width:28px; text-align:right; }
 
-    /* ── Settings fields ── */
-    .field { display:flex; flex-direction:column; gap:6px; }
-    .field-row { display:flex; align-items:center; gap:8px; }
+    /* ── Folder Button ── */
+    .folder-btn {
+      display:flex; align-items:center; gap:8px;
+      padding:9px 11px; background:#f2f2f7; border-radius:10px;
+      border:1.5px solid #f2f2f7; cursor:pointer;
+      transition:all 0.15s; user-select:none;
+    }
+    .folder-btn:hover { background:#e9e9ef; border-color:#d1d1d6; }
+    .folder-btn svg { flex-shrink:0; }
+    .folder-btn-name {
+      flex:1; font-size:11.5px; color:#3a3a3c;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;
+    }
+    .folder-chevron { color:#c7c7cc; }
+    .folder-hint { font-size:10px; color:#c7c7cc; margin-top:4px; padding-left:2px; }
 
-    .inp {
-      flex:1; background:#181819; border:1.5px solid #202022; border-radius:8px;
-      padding:8px 10px; font-size:12px; font-family:inherit;
-      color:#e0e0e0; outline:none; transition:border-color 0.2s;
+    /* ── Shortcut ── */
+    .shortcut-row { display:flex; align-items:center; gap:8px; }
+    .kbd-box {
+      flex:1; text-align:center; padding:8px; border-radius:9px;
+      background:#f2f2f7; border:1.5px solid #e5e5ea;
+      font-family:monospace; font-size:15px; font-weight:700;
+      color:#1c1c1e; letter-spacing:0.06em;
+      transition:border-color 0.2s, color 0.2s;
     }
-    .inp:focus { border-color:#cc0000; }
-    .inp::placeholder { color:#444; }
-
-    .folder-hint {
-      font-size:10px; color:#444; letter-spacing:0.01em; padding-left:1px;
-    }
-    .folder-hint span { color:#666; font-weight:500; }
-
-    /* ── Shortcut Recorder ── */
-    .shortcut-box {
-      display:flex; align-items:center; justify-content:space-between;
-      background:#181819; border:1.5px solid #202022; border-radius:8px;
-      padding:8px 10px;
-    }
-    .shortcut-box.recording { border-color:#ff8800; background:rgba(255,136,0,0.05); }
-    .shortcut-label-text { font-size:12px; color:#888; }
-    .shortcut-box.recording .shortcut-label-text { color:#ff9f0a; }
-    .kbd-badge {
-      display:inline-flex; align-items:center; gap:4px;
-      font-size:12px; color:#ccc; font-weight:600;
-    }
-    .kbd-badge span {
-      background:#242426; border:1px solid #333; border-radius:5px;
-      padding:2px 8px; font-family:monospace; font-size:11px;
-      box-shadow:0 1px 0 #111;
-    }
+    .kbd-box.recording { border-color:#007aff; color:#007aff; }
     .rec-btn {
-      font-size:10px; font-weight:600; color:#ff4040; cursor:pointer;
-      padding:3px 8px; border-radius:5px; border:1px solid rgba(255,0,0,0.2);
-      background:rgba(255,0,0,0.06); transition:all 0.15s; white-space:nowrap;
-      font-family:inherit;
+      padding:8px 12px; border:1.5px solid #e5e5ea; border-radius:9px;
+      background:#fff; color:#1c1c1e; font-family:inherit; font-size:11.5px;
+      font-weight:500; cursor:pointer; white-space:nowrap; outline:none;
+      transition:all 0.15s;
     }
-    .rec-btn:hover { background:rgba(255,0,0,0.12); border-color:rgba(255,0,0,0.35); }
-    .shortcut-box.recording .rec-btn { color:#ff9f0a; border-color:rgba(255,136,0,0.3); background:rgba(255,136,0,0.08); }
+    .rec-btn:hover { background:#f2f2f7; }
+    .shortcut-hint { font-size:10px; color:#c7c7cc; margin-top:5px; padding-left:2px; transition:color 0.2s; }
 
     /* ── Divider ── */
-    .divider { height:1px; background:linear-gradient(to right, transparent, #1e1e20, transparent); }
+    .divider { height:1px; background:#f2f2f7; }
 
     /* ── Status ── */
     .status {
       display:flex; align-items:center; gap:8px;
-      padding:9px 11px; border-radius:9px;
-      background:#151517; border:1px solid #1e1e20;
-      font-size:11px; color:#555; transition:all 0.3s;
+      padding:9px 11px; border-radius:10px;
+      background:#f2f2f7; border:1.5px solid #f2f2f7;
+      font-size:11px; color:#8e8e93; transition:all 0.3s;
     }
-    .status-dot { width:6px; height:6px; border-radius:50%; background:#333; flex-shrink:0; transition:all 0.3s; }
-    .status.ready { border-color:rgba(48,209,88,0.18); }
-    .status.ready .status-dot { background:#30d158; box-shadow:0 0 5px rgba(48,209,88,0.5); }
-    .status.ready .status-msg { color:#888; }
+    .status-dot { width:6px; height:6px; border-radius:50%; background:#c7c7cc; flex-shrink:0; transition:all 0.3s; }
+    .status.ready { border-color:rgba(52,199,89,0.25); background:#f0fdf4; }
+    .status.ready .status-dot { background:#34c759; box-shadow:0 0 5px rgba(52,199,89,0.5); }
+    .status.ready .status-msg { color:#3a3a3c; }
 
     /* ── Save button ── */
-    .footer { padding:0 18px 16px; }
+    .footer { padding:0 15px 14px; }
     .save-btn {
-      width:100%; padding:10px; border:none; border-radius:9px;
+      width:100%; padding:10px; border:none; border-radius:10px;
       background:linear-gradient(135deg,#d40000,#ff0000);
       color:white; font-family:inherit; font-size:13px; font-weight:600;
       cursor:pointer; letter-spacing:0.01em; position:relative; overflow:hidden;
       transition:all 0.2s;
     }
     .save-btn::before { content:''; position:absolute; inset:0; background:rgba(255,255,255,0); transition:background 0.2s; }
-    .save-btn:hover::before { background:rgba(255,255,255,0.07); }
+    .save-btn:hover::before { background:rgba(255,255,255,0.1); }
     .save-btn:active { transform:scale(0.98); }
-    .save-btn.ok { background:linear-gradient(135deg,#1a7a3a,#30d158); }
+    .save-btn.ok { background:linear-gradient(135deg,#1a7a3a,#34c759); }
   </style>
 </head>
 <body>
@@ -210,16 +200,12 @@
         <input type="radio" name="format" id="fmt-tif" value="tif">
         <label for="fmt-tif">
           <div class="fmt-badge">TIF</div>
-          <div class="fmt-name">Lossless</div>
-          <span class="fmt-tag tag-loss">LOSSLESS</span>
         </label>
       </div>
       <div class="format-card">
         <input type="radio" name="format" id="fmt-jpg" value="jpg">
         <label for="fmt-jpg">
           <div class="fmt-badge">JPG</div>
-          <div class="fmt-name">Compressed</div>
-          <span class="fmt-tag tag-comp">LOSSY</span>
         </label>
       </div>
     </div>
@@ -246,27 +232,32 @@
 <div class="panel" id="panel-settings">
 
   <!-- Save Folder -->
-  <div class="field">
+  <div>
     <div class="s-label">Save Folder</div>
-    <div class="field-row">
-      <input class="inp" type="text" id="save-folder"
-             placeholder="YouTube Frames" spellcheck="false">
+    <div class="folder-btn" id="folder-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+           stroke="#3a3a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="folder-btn-name" id="folder-name">Not Selected</span>
+      <svg class="folder-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none"
+           stroke="#c7c7cc" stroke-width="2.5" stroke-linecap="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
     </div>
-    <div class="folder-hint">
-      Downloads / <span id="folder-preview">YouTube Frames</span> / ...
-    </div>
+    <div class="folder-hint" id="folder-hint">Click to choose folder — once is enough</div>
   </div>
 
   <div class="divider"></div>
 
   <!-- Keyboard Shortcut -->
-  <div class="field">
+  <div>
     <div class="s-label">Keyboard Shortcut</div>
-    <div class="shortcut-box" id="shortcut-box">
-      <span class="shortcut-label-text" id="shortcut-label">Active shortcut</span>
-      <span class="kbd-badge" id="kbd-display"><span id="kbd-key">P</span></span>
+    <div class="shortcut-row">
+      <div class="kbd-box" id="kbd-box">P</div>
       <button class="rec-btn" id="rec-btn">Change</button>
     </div>
+    <div class="shortcut-hint" id="shortcut-hint">Press P → capture</div>
   </div>
 
   <div class="divider"></div>

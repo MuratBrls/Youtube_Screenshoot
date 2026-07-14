@@ -1,6 +1,6 @@
 /**
- * popup.js — Frame Catcher Settings Logic  v1.1
- * Tabs: Format | Ayarlar (folder + keyboard shortcut)
+ * popup.js — Frame Catcher Settings Logic  v2.0
+ * White/iOS-style design matching the in-page settings panel
  */
 
 (function () {
@@ -12,13 +12,13 @@
   const qualitySlider  = document.getElementById('jpg-quality');
   const qDisplay       = document.getElementById('q-display');
 
-  const folderInput    = document.getElementById('save-folder');
-  const folderPreview  = document.getElementById('folder-preview');
+  const folderBtn      = document.getElementById('folder-btn');
+  const folderName     = document.getElementById('folder-name');
+  const folderHint     = document.getElementById('folder-hint');
 
-  const shortcutBox    = document.getElementById('shortcut-box');
-  const shortcutLabel  = document.getElementById('shortcut-label');
-  const kbdKey         = document.getElementById('kbd-key');
+  const kbdBox         = document.getElementById('kbd-box');
   const recBtn         = document.getElementById('rec-btn');
+  const shortcutHint   = document.getElementById('shortcut-hint');
 
   const saveBtn        = document.getElementById('save-btn');
   const statusEls      = [
@@ -37,11 +37,11 @@
   });
 
   // ── Load saved settings ───────────────────────────────────────────────────
-  chrome.storage.local.get(['format', 'jpgQuality', 'saveFolder', 'shortcutKey'], (d) => {
-    const fmt     = d.format      || 'tif';
-    const quality = d.jpgQuality  || 95;
-    const folder  = d.saveFolder  || 'YouTube Frames';
-    const key     = (d.shortcutKey || 'p').toUpperCase();
+  chrome.storage.local.get(['format', 'jpgQuality', 'shortcutKey', 'savedFolderName'], (d) => {
+    const fmt     = d.format          || 'jpg';
+    const quality = d.jpgQuality      || 95;
+    const key     = (d.shortcutKey    || 'p').toUpperCase();
+    const folder  = d.savedFolderName || null;
 
     // Format
     const radio = document.querySelector(`input[name="format"][value="${fmt}"]`);
@@ -54,11 +54,14 @@
     updateSlider(quality);
 
     // Folder
-    folderInput.value    = folder;
-    folderPreview.textContent = folder || 'YouTube Frames';
+    if (folder) {
+      folderName.textContent = folder;
+      folderHint.textContent = `Will save to "${folder}"`;
+    }
 
     // Shortcut
-    kbdKey.textContent = key;
+    kbdBox.textContent = key;
+    shortcutHint.textContent = `Press ${key} → capture`;
   });
 
   // ── YouTube tab status ────────────────────────────────────────────────────
@@ -94,72 +97,114 @@
     qualitySlider.style.setProperty('--pct', pct + '%');
   }
 
-  // ── Folder input ──────────────────────────────────────────────────────────
-  folderInput.addEventListener('input', () => {
-    folderPreview.textContent = folderInput.value.trim() || 'YouTube Frames';
+  // ── Folder button (opens a new tab to YouTube for FSA picker) ─────────────
+  folderBtn.addEventListener('click', async () => {
+    // Popup context doesn't support showDirectoryPicker directly.
+    // Send message to active YouTube tab to trigger folder picker there.
+    const tabs = await new Promise(res =>
+      chrome.tabs.query({ active: true, currentWindow: true }, res)
+    );
+    const tab = tabs[0];
+    if (tab && tab.url && tab.url.includes('youtube.com')) {
+      chrome.tabs.sendMessage(tab.id, { action: 'pickFolder' }, (resp) => {
+        if (chrome.runtime.lastError) return;
+        if (resp && resp.folderName) {
+          folderName.textContent = resp.folderName;
+          folderHint.textContent = `Will save to "${resp.folderName}"`;
+          folderHint.style.color = '#34c759';
+          folderBtn.style.borderColor = '#34c759';
+          setTimeout(() => {
+            folderHint.style.color = '';
+            folderBtn.style.borderColor = '';
+          }, 2000);
+        }
+      });
+    } else {
+      // Load saved folder name from storage
+      chrome.storage.local.get(['savedFolderName'], (d) => {
+        if (d.savedFolderName) {
+          folderName.textContent = d.savedFolderName;
+          folderHint.textContent = `Will save to "${d.savedFolderName}"`;
+        } else {
+          folderHint.textContent = 'Open a YouTube video page first';
+          folderHint.style.color = '#ff3b30';
+          setTimeout(() => {
+            folderHint.textContent = 'Click to choose folder — once is enough';
+            folderHint.style.color = '';
+          }, 2500);
+        }
+      });
+    }
   });
 
   // ── Keyboard shortcut recorder ────────────────────────────────────────────
   let recording = false;
 
   recBtn.addEventListener('click', () => {
-    if (recording) return;
-    recording = true;
-    shortcutBox.classList.add('recording');
-    shortcutLabel.textContent = 'Press a key…';
-    kbdKey.textContent = '?';
-    recBtn.textContent = 'Cancel';
-
-    recBtn.addEventListener('click', cancelRecording, { once: true });
+    if (!recording) {
+      recording = true;
+      kbdBox.textContent = '·';
+      kbdBox.classList.add('recording');
+      recBtn.textContent = 'Cancel';
+      shortcutHint.textContent = 'Press any key…';
+      shortcutHint.style.color = '#007aff';
+    } else {
+      cancelRecording();
+    }
   });
 
   function cancelRecording() {
     recording = false;
-    shortcutBox.classList.remove('recording');
-    shortcutLabel.textContent = 'Active shortcut';
+    kbdBox.classList.remove('recording');
     recBtn.textContent = 'Change';
-    // Restore current saved key
+    shortcutHint.style.color = '';
     chrome.storage.local.get(['shortcutKey'], (d) => {
-      kbdKey.textContent = (d.shortcutKey || 'p').toUpperCase();
+      const k = (d.shortcutKey || 'p').toUpperCase();
+      kbdBox.textContent = k;
+      shortcutHint.textContent = `Press ${k} → capture`;
     });
   }
 
   document.addEventListener('keydown', (e) => {
     if (!recording) return;
-
-    // Ignore modifier-only keys
-    if (['Control','Shift','Alt','Meta','CapsLock','Tab','Escape'].includes(e.key)) {
-      if (e.key === 'Escape') cancelRecording();
-      return;
-    }
+    if (['Control','Shift','Alt','Meta','CapsLock','Tab'].includes(e.key)) return;
+    if (e.key === 'Escape') { cancelRecording(); return; }
 
     e.preventDefault();
 
     const key = e.key.toLowerCase();
-    kbdKey.textContent = key.toUpperCase();
-    shortcutLabel.textContent = 'Active shortcut';
-    shortcutBox.classList.remove('recording');
+    kbdBox.textContent = key.toUpperCase();
+    kbdBox.classList.remove('recording');
+    kbdBox.style.borderColor = '#34c759';
+    kbdBox.style.color = '#34c759';
     recBtn.textContent = 'Change';
     recording = false;
 
-    // Save immediately
+    shortcutHint.textContent = `Press ${key.toUpperCase()} → capture`;
+    shortcutHint.style.color = '#34c759';
+
+    setTimeout(() => {
+      kbdBox.style.borderColor = '';
+      kbdBox.style.color = '';
+      shortcutHint.style.color = '';
+    }, 1500);
+
     chrome.storage.local.set({ shortcutKey: key });
   });
 
   // ── Save button ───────────────────────────────────────────────────────────
   saveBtn.addEventListener('click', () => {
-    const fmt     = document.querySelector('input[name="format"]:checked')?.value || 'tif';
+    const fmt     = document.querySelector('input[name="format"]:checked')?.value || 'jpg';
     const quality = parseInt(qualitySlider.value, 10);
-    const folder  = folderInput.value.trim() || 'YouTube Frames';
-    const key     = kbdKey.textContent.toLowerCase();
+    const key     = kbdBox.textContent.toLowerCase();
 
     chrome.storage.local.set(
-      { format: fmt, jpgQuality: quality, saveFolder: folder, shortcutKey: key },
+      { format: fmt, jpgQuality: quality, shortcutKey: key },
       () => {
-        saveBtn.textContent = '✓ Kaydedildi!';
+        saveBtn.textContent = '✓ Saved!';
         saveBtn.classList.add('ok');
         setTimeout(() => {
-          saveBtn.textContent = 'Kaydet & Uygula';
+          saveBtn.textContent = 'Save & Apply';
           saveBtn.classList.remove('ok');
         }, 1800);
       }
