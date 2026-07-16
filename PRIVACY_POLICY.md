@@ -1,8 +1,8 @@
-# Privacy Policy for YouTube Frame Catcher & Metadata Stamper
+# Privacy Policy for YouTube Screenshot Studio
 
 **Effective Date:** July 10, 2026
 
-This privacy policy governs your use of the **YouTube Frame Catcher & Metadata Stamper** browser extension (the "Extension").
+This privacy policy governs your use of the **YouTube Screenshot Studio** browser extension (the "Extension").
 
 ---
 
